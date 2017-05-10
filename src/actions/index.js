@@ -4,7 +4,9 @@ const KillopActions = Reflux.createActions([
   /**
    * define your actions as strings below, for example:
    */
-  'toggleStatus'
+  'toggleStatus',
+  'killOp',
+  'refreshOps'
 ]);
 
 module.exports = KillopActions;

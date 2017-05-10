@@ -1,6 +1,7 @@
 const React = require('react');
 const PropTypes = require('prop-types');
-const KillopActions = require('../actions');
+const KillOpActions = require('../actions');
+
 // const ToggleButton = require('./toggle-button');
 
 // const debug = require('debug')('mongodb-compass:killop');
@@ -11,6 +12,15 @@ class KillopComponent extends React.Component {
 
   onClick() {
     KillopActions.toggleStatus();
+  }
+
+  onKillClicked(opid) {
+      debug("killing op: " + opid);
+      KillOpActions.killOp(opid);
+  }
+
+  onRefreshClicked() {
+      KillOpActions.refreshOps();
   }
 
   /**
@@ -38,18 +48,31 @@ class KillopComponent extends React.Component {
 		return null
     }
 
-	const columns = Object.keys(this.props.currentOps[0])
+	const columns = Object.keys(this.props.currentOps[0]);
+    columns.push("kill")
+
+    const rows = _.map(this.props.currentOps, (o) => {
+        o['kill'] = <button onClick={this.onKillClicked.bind(this, o.opid)}>kill</button>
+    })
 
     return (
+      <div className='killop'>
+        <div className='refresh'>
+            <button onClick={this.onRefreshClicked.bind(this)}>Refresh</button>
+        </div>
+
+        <div>
             <SortableTable
               theme="light"
               columns={columns}
               rows={this.props.currentOps}
-              valueIndex={0}
             />
+        </div>
+      </div>
     );
   }
 }
+
 
 KillopComponent.propTypes = {
   status: PropTypes.oneOf(['enabled', 'disabled'])
