@@ -39,9 +39,6 @@ class KillopComponent extends React.Component {
     }
 
 	const columns = Object.keys(this.props.currentOps[0])
-        // { "opid" : 5, "desc" : "repl bgsync" },
-        // { "opid" : 6, "desc" : "curop" }]
-
 
     return (
             <SortableTable

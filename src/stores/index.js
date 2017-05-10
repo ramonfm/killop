@@ -2,6 +2,7 @@ const Reflux = require('reflux');
 const KillopActions = require('../actions');
 const StateMixin = require('reflux-state-mixin');
 const debug = require('debug')('mongodb-compass:stores:killop');
+// const _ = require('lodash')
 
 const { SortableTable, Tooltip } = require('hadron-react-components');
 
@@ -78,13 +79,34 @@ const KillopStore = Reflux.createStore({
 
   handleCurrentOp(err, res) {
 	// This is where I get the output of currentOp (in res)!!
-    debug('some text!', err, res);
+    debug('myhandler input:', res)
 
 	// FIXME: this will need a timer
-    this.setState({currentOps : [ { opid : 123, desc : 'Dummy op' } ]});
+	
+    var output = [];
+    var res_len = res.inprog.length;
+    for (var i=0 ; i< res_len; i++) {
+	   
+       if (Object.keys(res.inprog[i].query).length === 0) {
+           var query = res.inprog[i].desc;
+       }
+       else {
+           var query = JSON.stringify(res.inprog[i].query)
+       }
+       debug('myhandler output', query);
+
+       output.push( {
+           opid : res.inprog[i].opid,
+           info : query
+       } )
+       debug('myhandler output:', output)
+    }
+    debug('myhandler output final:', output)
+	this.setState({currentOps : output});
+
   },
 
-  /**
+  /*
    * Initialize the Killop store state. The returned object must
    * contain all keys that you might want to modify with this.setState().
    *

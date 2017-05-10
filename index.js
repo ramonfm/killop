@@ -6,7 +6,7 @@ const KillopStore = require('./lib/stores');
  * A sample role for the component.
  */
 const ROLE = {
-  name: 'Killop',
+  name: 'Operations',
   component: KillopComponent
 };
 
