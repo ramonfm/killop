@@ -13,6 +13,8 @@ class ConnectedKillopComponent extends React.Component {
    * @returns {React.Component} The rendered component.
    */
   render() {
+    // debug("I'm on render!", this.props)
+    // "this.props" has the store properties that get passed down to the components
     return (
       <StoreConnector store={Store}>
         <KillopComponent actions={Actions} {...this.props} />

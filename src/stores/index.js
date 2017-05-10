@@ -1,8 +1,9 @@
 const Reflux = require('reflux');
 const KillopActions = require('../actions');
 const StateMixin = require('reflux-state-mixin');
-
 const debug = require('debug')('mongodb-compass:stores:killop');
+
+const { SortableTable, Tooltip } = require('hadron-react-components');
 
 /**
  * Killop store.
@@ -26,6 +27,7 @@ const KillopStore = Reflux.createStore({
    * Initialize everything that is not part of the store's state.
    */
   init() {
+	// FIXME: timer would go here (setTimeout() / setInterval())
   },
 
   /**
@@ -56,6 +58,30 @@ const KillopStore = Reflux.createStore({
    *
    */
   onConnected(error, dataService) {
+    if (error) {
+      return;
+    }
+    // before running the command, set status to "fetching"
+    // this.setState({ status: 'fetching' });
+    dataService.command('admin', {currentOp: 1}, this.handleCurrentOp.bind(this));
+  },
+
+  onRefreshClicked(error, dataService) {
+    if (error) {
+      return;
+    }
+    // before running the command, set status to "fetching"
+    // this.setState({ status: 'fetching' });
+    dataService.command('admin', {currentOp: 1}, this.handleCurrentOp.bind(this));
+  },
+
+
+  handleCurrentOp(err, res) {
+	// This is where I get the output of currentOp (in res)!!
+    debug('some text!', err, res);
+
+	// FIXME: this will need a timer
+    this.setState({currentOps : [ { opid : 123, desc : 'Dummy op' } ]});
   },
 
   /**
@@ -66,17 +92,12 @@ const KillopStore = Reflux.createStore({
    */
   getInitialState() {
     return {
-      status: 'enabled'
-    };
-  },
+	  // Status of operations (e.g.: fetching, ...)
+      status: 'initial',
 
-  /**
-   * handlers for each action defined in ../actions/index.jsx, for example:
-   */
-  toggleStatus() {
-    this.setState({
-      status: this.state.status === 'enabled' ? 'disabled' : 'enabled'
-    });
+      // Initial state of my data
+      currentOps : []
+    };
   },
 
   /**

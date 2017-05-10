@@ -23,7 +23,7 @@ function activate() {
   //   - CollectionHUD.Item
   //   - Header.Item
 
-  global.hadronApp.appRegistry.registerRole('', ROLE);
+  global.hadronApp.appRegistry.registerRole('Instance.Tab', ROLE);
   global.hadronApp.appRegistry.registerAction('Killop.Actions', KillopActions);
   global.hadronApp.appRegistry.registerStore('Killop.Store', KillopStore);
 }
@@ -32,7 +32,7 @@ function activate() {
  * Deactivate all the components in the Killop package.
  */
 function deactivate() {
-  global.hadronApp.appRegistry.deregisterRole('', ROLE);
+  global.hadronApp.appRegistry.deregisterRole('Instance.Tab', ROLE);
   global.hadronApp.appRegistry.deregisterAction('Killop.Actions');
   global.hadronApp.appRegistry.deregisterStore('Killop.Store');
 }
