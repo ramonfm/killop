@@ -2,6 +2,8 @@ const Reflux = require('reflux');
 const KillopActions = require('../actions');
 const StateMixin = require('reflux-state-mixin');
 const debug = require('debug')('mongodb-compass:stores:killop');
+const moment = require('moment');
+
 // const _ = require('lodash')
 
 const { SortableTable, Tooltip } = require('hadron-react-components');
@@ -108,26 +110,16 @@ const KillopStore = Reflux.createStore({
        }
        debug('myhandler output', query);
 
-       var mu = res.inprog[i].microsecs_running
-       var timeList = []
-
-           var ms = mu / 1000
-           var time = new Date(ms)
-           var ms = time.getMilliseconds()
-           var ss = time.getSeconds()
-           var mm = time.getMinutes()
-           var hh = time.getHours()
-
-           if (ms > 1) timeList.push(ms) //
-           if (ss > 1) timeList.push(ss) // 
-           if (mm > 1) timeList.push(mm) //
-           if (hh > 1) timeList.push(hh) //
-           var timeString=hh + ':' + mm + ':' + ss + '.' + ms
-           timeList.push(timeString)
+       // get the time running if it has it
+       var timeOutput = "";
+       if(res.inprog[i].microsecs_running != null) {
+         var d = moment.duration(res.inprog[i].microsecs_running / 1000);
+         timeOutput = Math.floor(d.asHours()) + moment.utc(res.inprog[i].microsecs_running / 1000).format(":mm:ss");
+       }
 
        output.push( {
            opid : res.inprog[i].opid,
-           // time : timeList,
+           time : timeOutput,
            info : query
        } )
        debug('myhandler output:', output)
