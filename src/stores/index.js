@@ -103,10 +103,13 @@ const KillopStore = Reflux.createStore({
     for (var i=0 ; i< res_len; i++) {
 	   
        if (Object.keys(res.inprog[i].query).length === 0) {
+           // If the query is empty this is a system operation
            var query = res.inprog[i].desc;
+           var system = true;
        }
        else {
            var query = JSON.stringify(res.inprog[i].query)
+           var system = false;
        }
        debug('myhandler output', query);
 
@@ -118,6 +121,7 @@ const KillopStore = Reflux.createStore({
        }
 
        output.push( {
+           system : system,
            opid : res.inprog[i].opid,
            time : timeOutput,
            info : query

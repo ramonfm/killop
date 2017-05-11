@@ -48,11 +48,13 @@ class KillopComponent extends React.Component {
 		return null
     }
 
-	const columns = Object.keys(this.props.currentOps[0]);
+	const columns = Object.keys(this.props.currentOps[0]).slice(1);
     columns.push("kill")
 
     const rows = _.map(this.props.currentOps, (o) => {
-        o['kill'] = <button onClick={this.onKillClicked.bind(this, o.opid)}>kill</button>
+        if (o.system === false) {
+            o['kill'] = <button onClick={this.onKillClicked.bind(this, o.opid)}>kill</button>
+        }
     })
 
     return (
